@@ -1,0 +1,32 @@
+{
+  "name": "reto-02-registro-contratos",
+  "version": "1.0.0",
+  "description": "Agente conversacional 'Registro de Contratos Vigentes' - Periferia IT Group",
+  "type": "module",
+  "main": "src/server.ts",
+  "scripts": {
+    "start": "node src/server.ts",
+    "dev": "node --watch src/server.ts",
+    "demo": "node demo.ts",
+    "build": "tsc"
+  },
+  "keywords": [
+    "agente",
+    "contratos",
+    "llm",
+    "typescript",
+    "periferia"
+  ],
+  "author": "José Segundo Molina Cerpa",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.9",
+    "typescript": "^5.7.3"
+  }
+}

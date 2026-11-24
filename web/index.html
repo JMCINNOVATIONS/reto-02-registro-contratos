@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perxia 2.0 · Agente de Registro de Contratos Vigentes</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- BARRA LATERAL / EXPLORADOR DE SHAREPOINT -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <div>
+          <h2>Perxia 2.0</h2>
+          <span class="sub-brand">Periferia IT Group</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="chat">
+          <span class="icon">💬</span> Conversación
+        </button>
+        <button class="nav-item" data-tab="maestro">
+          <span class="icon">📊</span> Maestro SharePoint
+        </button>
+        <button class="nav-item" data-tab="alertas">
+          <span class="icon">🚨</span> Alertas & Riesgos
+        </button>
+        <button class="nav-item" data-tab="historial">
+          <span class="icon">📜</span> Auditoría / Historial
+        </button>
+      </nav>
+
+      <div class="sidebar-meta">
+        <div class="system-status">
+          <div class="status-indicator online"></div>
+          <div>
+            <div class="status-title" id="providerLabel">Conectando...</div>
+            <div class="status-sub" id="modelLabel">Buzón central activo</div>
+          </div>
+        </div>
+        <button class="btn-reset" id="btnReset" title="Reiniciar datos de prueba">
+          🔄 Reiniciar Simulación
+        </button>
+      </div>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="main-content">
+      <!-- VISTA 1: CHAT CONVERSACIONAL -->
+      <section class="view active" id="view-chat">
+        <header class="chat-header">
+          <div>
+            <h1>Agente de Contratos Vigentes</h1>
+            <p>Punto único de recepción, extracción estructurada y gobierno de contratos</p>
+          </div>
+          <div class="quick-actions">
+            <button class="btn-action primary" id="btnQuickProcesar">
+              🚀 Procesar Buzón
+            </button>
+            <button class="btn-action secondary" id="btnQuickAlertas">
+              🚨 Ver Alertas
+            </button>
+          </div>
+        </header>
+
+        <!-- BANNER DE CONFIRMACIÓN HUMANA (RN5 / CA3) -->
+        <div class="confirmation-banner hidden" id="confirmationBanner">
+          <div class="banner-icon">⚠️</div>
+          <div class="banner-content">
+            <h4>Confirmación Humana Requerida</h4>
+            <p id="confirmationText">El contrato contiene campos de baja confianza o monto por demanda.</p>
+          </div>
+          <div class="banner-actions">
+            <button class="btn-confirm" id="btnConfirmarSi">✅ Confirmar y Registrar</button>
+            <button class="btn-reject" id="btnConfirmarNo">❌ Rechazar Registro</button>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <!-- Mensaje inicial de bienvenida -->
+          <div class="message assistant">
+            <div class="msg-avatar">🤖</div>
+            <div class="msg-bubble">
+              <div class="msg-text">
+                <p><strong>¡Hola!</strong> Soy el Agente de Registro de Contratos Vigentes de Periferia IT Group.</p>
+                <p>Estoy listo para procesar el buzón de recepción con fecha de corte de hoy (<strong>2026-09-03</strong>). Validaré duplicados, otrosíes, pólizas y solicitaré tu confirmación antes de registrar campos dudosos.</p>
+                <p>Presiona <strong>"Procesar Buzón"</strong> o ingresa tu instrucción en el campo inferior.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INDICADOR DE PENSANDO / EJECUTANDO -->
+        <div class="thinking-indicator hidden" id="thinkingIndicator">
+          <div class="spinner"></div>
+          <span id="thinkingText">El agente está analizando el buzón y llamando herramientas...</span>
+        </div>
+
+        <footer class="chat-input-bar">
+          <form id="chatForm">
+            <input
+              type="text"
+              id="userInput"
+              placeholder="Escribe tu instrucción (ej. 'Procesa el buzón de contratos con fecha de hoy 2026-09-03')..."
+              autocomplete="off"
+            />
+            <button type="submit" id="btnSend">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+        </footer>
+      </section>
+
+      <!-- VISTA 2: MAESTRO SHAREPOINT -->
+      <section class="view" id="view-maestro">
+        <header class="view-header">
+          <div>
+            <h1>Maestro de Contratos Vigentes</h1>
+            <p>Fuente de verdad en SharePoint (<code>out/sharepoint/maestro-contratos.csv</code>)</p>
+          </div>
+          <button class="btn-refresh" id="btnRefreshMaestro">🔄 Actualizar</button>
+        </header>
+        <div class="table-container" id="maestroTableContainer">
+          <p class="placeholder-text">Cargando maestro de contratos...</p>
+        </div>
+      </section>
+
+      <!-- VISTA 3: ALERTAS Y RIESGOS -->
+      <section class="view" id="view-alertas">
+        <header class="view-header">
+          <div>
+            <h1>Reporte de Alertas Tempranas y Pólizas</h1>
+            <p>Contratos por vencer (≤ 60 días), pólizas pendientes y gap cubierto (<code>out/alertas.md</code>)</p>
+          </div>
+          <button class="btn-refresh" id="btnRefreshAlertas">🔄 Actualizar</button>
+        </header>
+        <div class="markdown-container" id="alertasContainer">
+          <p class="placeholder-text">Presiona "Ver Alertas" o procesa el buzón para generar el informe.</p>
+        </div>
+      </section>
+
+      <!-- VISTA 4: HISTORIAL DE AUDITORÍA -->
+      <section class="view" id="view-historial">
+        <header class="view-header">
+          <div>
+            <h1>Trazabilidad y Auditoría de Cambios</h1>
+            <p>Historial inmutable de altas y modificaciones (<code>out/sharepoint/historial.jsonl</code>)</p>
+          </div>
+          <button class="btn-refresh" id="btnRefreshHistorial">🔄 Actualizar</button>
+        </header>
+        <div class="timeline-container" id="historialContainer">
+          <p class="placeholder-text">Cargando historial de auditoría...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
